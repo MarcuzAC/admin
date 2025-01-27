@@ -5,7 +5,7 @@ import sqlite3
 
 # Initialize Flask app
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": "https://admin-wgdw.onrender.com"}})
 
 # Categories
 categories = [
@@ -39,6 +39,11 @@ init_db()
 app.config['VIDEO_FOLDER'] = 'local_videos'
 app.config['THUMBNAIL_FOLDER'] = 'thumbnails'
 
+@app.route('/')
+def home():
+    """Default route for the application."""
+    return jsonify({'status': 'success', 'message': 'Welcome to the Video API!'}), 200
+
 @app.route('/videos/<filename>')
 def uploaded_file(filename):
     return send_from_directory(app.config['VIDEO_FOLDER'], filename)
@@ -66,8 +71,8 @@ def get_media():
             {
                 'id': video[0],
                 'title': video[1],
-                'file_path': f"http://localhost:5000/videos/{os.path.basename(video[2])}",
-                'thumbnail_path': f"http://localhost:5000/thumbnails/{os.path.basename(video[3])}",
+                'file_path': f"https://admin-wgdw.onrender.com/videos/{os.path.basename(video[2])}",
+                'thumbnail_path': f"https://admin-wgdw.onrender.com/thumbnails/{os.path.basename(video[3])}",
                 'category': video[4]
             }
             for video in videos
